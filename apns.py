@@ -480,7 +480,7 @@ class GatewayConnection(APNsConnection):
             self._error_response_handler_worker = None
             self._response_listener = None
             
-        self._sent_notifications = collections.deque(maxlen=SENT_BUFFER_QTY)
+            self._sent_notifications = collections.deque(maxlen=SENT_BUFFER_QTY)
 
     def _init_error_response_handler_worker(self):
         self._send_lock = threading.RLock()
@@ -556,7 +556,8 @@ class GatewayConnection(APNsConnection):
             _logger.warning("error response handler worker is not started after %s secs" % TIMEOUT_SEC)
 
     def send_notification_multiple(self, frame):
-        self._sent_notifications += frame.get_notifications(self)
+        if self.enhanced:
+            self._sent_notifications += frame.get_notifications(self)
         return self.write(frame.get_frame())
     
     def register_response_listener(self, response_listener):
